@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require('cors')
+const cors = require('cors');
+const { response } = require("express");
 
 require("./models/home");
 const Home = mongoose.model("Home");
@@ -63,7 +64,7 @@ app.post("/home", async (req, res) => {
     topLinkBtn: "http://localhost:3000/",
 
     serTitulo: "Serviços",
-    serSubstitulo: "Featured content or information",
+    serSubtitulo: "Featured content or information",
     serUmTitulo: "Serviço 1",
     serUmIcone: "code",
     serUmDesc:
@@ -101,16 +102,24 @@ app.post("/home", async (req, res) => {
 });
 
 app.post("/contato", async (req, res) => {
+
+  await sleep(300);
+
+  function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  };
+  
   await Contato.create(req.body, (err) => {
-    if (err)
-      return res.status(400).json({
-        err: true,
+    if (err) return res.status(400).json({
+        error: true,
         message: "Erro: Mensagem de contato não cadastrada com sucesso!",
       });
   });
 
   return res.json({
-    err: false,
+    error: false,
     message: "Mensagem de contato cadastrado com sucesso!",
   });
 });
